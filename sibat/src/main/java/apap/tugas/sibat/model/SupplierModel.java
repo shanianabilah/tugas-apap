@@ -1,5 +1,7 @@
 package apap.tugas.sibat.model;
 
+import org.springframework.jmx.export.annotation.ManagedNotification;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +30,46 @@ public class SupplierModel implements Serializable {
     @Column(name = "nomorTelepon", nullable = false)
     private Long nomorTelepon;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ObatSupplierModel> listObatSupplier;
+    @ManyToMany(mappedBy = "listSupplier")
+    List<ObatModel> listObat;
+
+    public Long getIdSupplier() {
+        return idSupplier;
+    }
+
+    public void setIdSupplier(Long idSupplier) {
+        this.idSupplier = idSupplier;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public Long getNomorTelepon() {
+        return nomorTelepon;
+    }
+
+    public void setNomorTelepon(Long nomorTelepon) {
+        this.nomorTelepon = nomorTelepon;
+    }
+
+    public List<ObatModel> getListObat() {
+        return listObat;
+    }
+
+    public void setListObat(List<ObatModel> listObat) {
+        this.listObat = listObat;
+    }
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ubah Obat</title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container-fluid">
+    <h3> Ubah Obat</h3>
+    <form th:action="@{/obat/ubah/{idObat}(idObat=${obat.idObat})}" th:objects="${obat}" method="POST">
+        <input type="hidden" th:field="${obat.idObat}" />
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Nama</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" th:field="${obat.nama}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="date" class="col-sm-2 col-form-label">Tanggal Terbit</label>
+            <div class="col-sm-10">
+                <input type="date" class="form-control" id="date" th:field="${obat.tanggalTerbit}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="price" class="col-sm-2 col-form-label">Harga</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="price" th:field="${obat.harga}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="bentuk" class="col-sm-2 col-form-label">Bentuk</label>
+            <div class="col-sm-10">
+                <select class="form-control form-control-lg" id="bentuk" th:field="${obat.bentuk}">
+                    <option selected th:value="${obat.bentuk}"></option>
+                    <option th:value="Cairan">Cairan</option>
+                    <option th:value="Kapsul">Kapsul</option>
+                    <option th:value="Tablet">Tablet</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Ubah</button>
+    </form>
+</div>
+</body>
+</html>

@@ -9,7 +9,7 @@
 </head>
 <body>
 <nav th:replace="fragments/fragment :: navbar"></nav>
-<div class="container-fluid">
+<div class="container" style="padding-top: 30px">
     <h3> Ubah Gudang</h3>
     <form th:action="@{/gudang/ubah/{idGudang}(idGudang=${gudang.idGudang})}" th:objects="${gudang}" method="POST">
         <div class="form-group row">

@@ -9,7 +9,7 @@
 </head>
 <body>
 <nav th:replace="fragments/fragment :: navbar"></nav>
-<div class="container" align="center">
+<div class="container" style="padding-top: 30px" align="center">
 <h3> Tambah Gudang</h3>
 <form th:action="@{/gudang/tambah}" th:objects="${gudang}" method="POST">
 

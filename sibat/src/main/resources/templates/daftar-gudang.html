@@ -10,7 +10,7 @@
 <body>
 <nav th:replace="fragments/fragment :: navbar"></nav>
 
-<div class="container-fluid">
+<div class="container">
     <h3 th:text="'Sistem Informasi Inventory Obat'"  align="center" style="padding-top: 30px"></h3>
     <br>
     <h3 style="background-color: #343a40; color: white">Daftar Gudang</h3>
@@ -29,9 +29,12 @@
             <td th:text="${gudang.nama}"></td>
             <td th:text="${gudang.alamat}"></td>
             <td>
-                <form th:action="@{/gudang/view/} + ${gudang.idGudang}" method="GET">
+                <!--<form th:action="@{/gudang/view/} + ${gudang.idGudang}" method="GET">
                     <button class="btn btn-info">Lihat</button>
-                </form>
+                </form>-->
+                <button class="btn btn-info">
+                    <a th:href="@{/gudang/view(idGudang=${gudang.idGudang})}" style="color: white">Lihat</a>
+                </button>
             </td>
             <td>
                 <form th:action="@{/gudang/ubah/} + ${gudang.idGudang}" method="GET">
@@ -48,7 +51,7 @@
     </table>
     <br>
     <form th:action="@{/gudang/tambah/}">
-        <button class="btn btn-dark">
+        <button class="btn btn-dark" style="float: right; margin-bottom: 20px">
             Tambah Gudang
         </button>
     </form>

@@ -66,11 +66,11 @@ public class ObatServiceImpl implements ObatService {
             kode += "02";
         }
         else if (obat.getBentuk().equals("Tablet")){
-            kode += "03";
+            kode += "03```";
         }
         String[] currYear = LocalDate.now().toString().split("-");
         kode += currYear[0];
-        String[] yearString = obat.getTanggalTerbit().toString().split(" ");
+        String[] yearString = obat.getTanggalTerbit().toString().split("-");
         int year = Integer.parseInt(yearString[yearString.length-1]) + 5;
         kode += String.valueOf(year);
         Random r = new Random();

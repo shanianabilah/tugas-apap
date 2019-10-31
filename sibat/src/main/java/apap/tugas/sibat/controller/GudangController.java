@@ -2,17 +2,20 @@ package apap.tugas.sibat.controller;
 
 import apap.tugas.sibat.model.GudangModel;
 import apap.tugas.sibat.model.GudangModel;
+import apap.tugas.sibat.model.ObatModel;
 import apap.tugas.sibat.service.GudangService;
+import apap.tugas.sibat.service.ObatService;
+import org.hibernate.validator.constraints.pl.REGON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import javax.print.attribute.standard.MediaSize;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 public class GudangController {
@@ -20,11 +23,14 @@ public class GudangController {
     @Autowired
     private GudangService gudangService;
 
+    @Qualifier("obatServiceImpl")
+    @Autowired
+    private ObatService obatService;
+
     // URL mapping view
     @RequestMapping(path = "/gudang", method = RequestMethod.GET)
     public String view(Model model){
         List<GudangModel> allGudang = gudangService.findAllGudang();
-        // Add model restoran ke "resto" untuk dirender
         model.addAttribute("listGudang", allGudang);
         // Return view template
         return "daftar-gudang";
@@ -44,13 +50,15 @@ public class GudangController {
         return "tambah-gudang";
     }
 
-    @RequestMapping(path = "/gudang/view/{idGudang}", method = RequestMethod.GET)
+    @RequestMapping(path = "/gudang/view", method = RequestMethod.GET)
     public String view(
             // Request Parameter untuk dipass
-            @PathVariable Long idGudang, Model model
+            @RequestParam(value = "idGudang") Long idGudang, Model model
     ){
         GudangModel gudang = gudangService.getGudangById(idGudang).get();
         model.addAttribute("gudang", gudang);
+        List<ObatModel> allObat = obatService.findAllObat();
+        model.addAttribute("listObat", allObat);
         return "lihat-gudang";
     }
 
@@ -78,18 +86,51 @@ public class GudangController {
             return "error";
         }
         else{
-            // Add model restoran ke "resto" untuk dirender
             if (gudang.getListObat().isEmpty()) {
                 model.addAttribute("gudang", gudang);
-
                 gudangService.deleteGudang(gudang);
-
-                // Return view template
                 return "hapus-gudang";
             }
             else{
                 return "error/hapus-gudang-error";
             }
         }
+    }
+
+    @RequestMapping(value = "/gudang/tambah-obat", method = RequestMethod.POST)
+    public String tambahObat(
+            @RequestParam(value = "idObat") Long idObat, @ModelAttribute GudangModel gudang, RedirectAttributes redirectAttributes){
+        GudangModel gudangSave = gudangService.getGudangById(gudang.getIdGudang()).get();
+        ObatModel obat = obatService.getObatById(idObat).get();
+        gudangSave.getListObat().add(obat);
+        obat.getListGudang().add(gudangSave);
+        gudangService.assignObat(gudang.getIdGudang(), idObat);
+        LocalTime time = LocalTime.now();
+        redirectAttributes.addFlashAttribute("gudang", gudangSave);
+        redirectAttributes.addFlashAttribute("obat", obat);
+        redirectAttributes.addFlashAttribute("time", time);
+        redirectAttributes.addFlashAttribute("success", true);
+        return "redirect:/gudang/view?idGudang="+ gudangSave.getIdGudang();
+    }
+
+
+    @RequestMapping(value="/gudang/expired-obat", method=RequestMethod.GET)
+    public String obatExpired(Model model){
+        List<GudangModel> allGudang = gudangService.findAllGudang();
+        model.addAttribute("listGudang", allGudang);
+        return "form-expired";
+    }
+
+    @RequestMapping(value = "/gudang/expired-obat", method = RequestMethod.POST)
+    public String viewObatExpired(
+            // Request Parameter untuk dipass
+            @RequestParam(value = "idGudang") Long idGudang, Model model
+    ){
+        GudangModel gudang = gudangService.getGudangById(idGudang).get();
+        List<ObatModel> listObat = gudang.getListObat();
+        List<ObatModel> listExpired = gudangService.obatExpired(listObat);
+        model.addAttribute("gudang", gudang);
+        model.addAttribute("listExpired", listExpired);
+        return "lihat-expired";
     }
 }

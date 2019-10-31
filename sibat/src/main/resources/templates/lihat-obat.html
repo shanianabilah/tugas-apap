@@ -11,7 +11,7 @@
 <nav th:replace="fragments/fragment :: navbar"></nav>
 
 <div class="container" align="center" style="padding-top: 30px">
-    <h3>Detail Data Obat</h3>
+    <h3 style="padding-bottom: 20px">Detail Data Obat</h3>
     <table class="table">
         <tr>
             <th scope="col">Kode</th>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <th scope="col">Tanggal Terbit</th>
-            <td th:text="${obat.tanggalTerbit}"></td>
+            <td th:text="${obat.getTanggalTerbitString()}"></td>
         </tr>
         <tr>
             <th scope="col">Harga</th>
@@ -43,13 +43,21 @@
         </tr>
         <tr>
             <th scope="col">Gudang Tempat Disimpan</th>
-            <td th:each="gudang, iterationStatus : *{obat.getListGudang()}" th:text="${gudang.nama}"></td>
+            <span th:if="${obat.getListGudang().size()==0}">
+                <td>-</td>
+            </span>
+            <span th:unless="${obat.getListGudang().size()==0}">
+                <td th:each="gudang, iterationStatus : *{obat.getListGudang()}" th:text="${gudang.nama}"></td>
+            </span>
         </tr>
         <tr>
             <th scope="col">Supplier</th>
-            <td th:each="supplier, iterationStatus : *{obat.getListSupplier()}">
-                <p th:text="${supplier.nama}"></p>
-            </td>
+            <span th:if="${obat.getListSupplier().size()==0}">
+                <td>-</td>
+            </span>
+            <span th:unless="${obat.getListSupplier().size()==0}">
+                <td th:each="supplier, iterationStatus : *{obat.getListSupplier()}" th:text="${supplier.nama}"></td>
+            </span>
         </tr>
     </table>
 </div>

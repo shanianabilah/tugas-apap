@@ -1,10 +1,15 @@
 package apap.tugas.sibat.service;
 
 import apap.tugas.sibat.model.GudangModel;
+import apap.tugas.sibat.model.ObatModel;
 import apap.tugas.sibat.repository.GudangDb;
+import apap.tugas.sibat.repository.ObatDb;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +17,9 @@ import java.util.Optional;
 public class GudangServiceImpl implements GudangService {
     @Autowired
     private GudangDb gudangDb;
+
+    @Autowired
+    private ObatDb obatDb;
 
     @Override
     public List<GudangModel> findAllGudang() {
@@ -45,6 +53,25 @@ public class GudangServiceImpl implements GudangService {
     @Override
     public void deleteGudang(GudangModel gudang) {
         gudangDb.delete(gudang);
+    }
+
+    @Override
+    public List<ObatModel> obatExpired(List<ObatModel> listObat) {
+        List<ObatModel> expired = new ArrayList<ObatModel>();
+        for (ObatModel obat : listObat){
+            if (obat.getTanggalTerbit().plusYears(5).isBefore(LocalDate.now())){
+                expired.add(obat);
+            }
+        }
+        return expired;
+    }
+
+    @Override
+    public void assignObat(Long idGudang, Long idObat){
+        GudangModel gudang = gudangDb.findByIdGudang(idGudang).get();
+        ObatModel obat = obatDb.findById(idObat).get();
+        gudangDb.save(gudang);
+        obatDb.save(obat);
     }
 
 

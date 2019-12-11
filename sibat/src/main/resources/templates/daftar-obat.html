@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Obat</title>
+
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container" style="margin-top: 20px">
+<h2 style="text-align:center">Sistem Informasi Inventory Obat</h2>
+<br>
+<h3 style="background-color: #343a40; color: white">Daftar Obat</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">No</th>
+        <th scope="col">Kode</th>
+        <th scope="col">Nama</th>
+        <th scope="col">Harga</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="obat, iterationStatus : *{listObat}">
+        <td th:text="${iterationStatus.count}"></td>
+        <td th:text="${obat.kode}"></td>
+        <td th:text="${obat.nama}"></td>
+        <td th:text="${obat.getHargaString()}"></td>
+        <td>
+            <button class="btn btn-info">
+                <a th:href="@{/obat/view(noReg=${obat.nomorRegistrasi})}" style="color: white">Lihat</a>
+            </button>
+        </td>
+        <td>
+            <form th:action="@{/obat/ubah/} + ${obat.idObat}" method="GET">
+                <button class="btn btn-dark">Ubah</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/obat/hapus/} + ${obat.idObat}" method="GET">
+                <button class="btn btn-danger">Hapus</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<form th:action="@{/obat/tambah/}">
+    <button class="btn btn-dark" style="float: right; margin-bottom: 20px">
+        Tambah Obat
+    </button>
+</form>
+</div>
+</body>
+</html>

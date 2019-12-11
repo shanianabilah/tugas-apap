@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymelaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title> Detail Obat </title>
+
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+
+<div class="container" align="center" style="padding-top: 30px">
+    <h3 style="padding-bottom: 20px">Detail Data Obat</h3>
+    <table class="table">
+        <tr>
+            <th scope="col">Kode</th>
+            <td th:text="${obat.kode}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Nama</th>
+            <td th:text="${obat.nama}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Nomor Registrasi</th>
+            <td th:text="${obat.nomorRegistrasi}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Bentuk</th>
+            <td th:text="${obat.bentuk}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Tanggal Terbit</th>
+            <td th:text="${obat.getTanggalTerbitString()}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Harga</th>
+            <td th:text="${obat.getHargaString()}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Jenis</th>
+            <td th:text="${obat.jenis.getNama()}"></td>
+        </tr>
+        <tr>
+            <th scope="col">Gudang Tempat Disimpan</th>
+            <span th:if="${obat.getListGudang().size()==0}">
+                <td>-</td>
+            </span>
+            <span th:unless="${obat.getListGudang().size()==0}">
+                <td th:each="gudang, iterationStatus : *{obat.getListGudang()}" th:text="${gudang.nama}"></td>
+            </span>
+        </tr>
+        <tr>
+            <th scope="col">Supplier</th>
+            <span th:if="${obat.getListSupplier().size()==0}">
+                <td>-</td>
+            </span>
+            <span th:unless="${obat.getListSupplier().size()==0}">
+                <td th:each="supplier, iterationStatus : *{obat.getListSupplier()}" th:text="${supplier.nama}"></td>
+            </span>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

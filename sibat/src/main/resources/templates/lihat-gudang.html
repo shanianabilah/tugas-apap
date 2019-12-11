@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lihat Gudang</title>
+
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container align-content-center" align="center" style="padding-top: 30px">
+    <h3 th:text="'Detail Gudang'"></h3>
+    <p th:text="'Nama    : ' + ${gudang.nama}"></p>
+    <p th:text="'Alamat    : ' + ${gudang.alamat}"></p>
+    <p th:text="'Jumlah Obat ' + ${gudang.listObat.size()}" ></p>
+    <div th:if="${success != null && success}" style="width: 25rem;">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p class="mb-0" th:text="'Obat ' + ${obat.nama} + ' berhasil ditambahkan ke Gudang ' + ${gudang.nama} + ' pada ' + ${time}"></p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <form th:action="@{/gudang/tambah-obat}" th:object="${gudang}" method="POST">
+        <input type="hidden" th:field="${gudang.idGudang}"/>
+        <div class="form-group row" style="justify-content: center">
+            <div class="col-sm-3">
+                <select name="idObat" class="form-control form-control-lg">
+                    <option th:value="null" selected>-- Pilih Obat --</option>
+                    <option th:each="obat : ${listObat}"
+                            th:value="${obat.idObat}"
+                            th:text="${obat.nama}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-dark">Submit</button>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Kode</th>
+            <th scope="col">Nama</th>
+            <th scope="col">Harga</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="obat, iterationStatus : *{gudang.listObat}">
+            <td th:text="${iterationStatus.count}"></td>
+            <td th:text="${obat.kode}"></td>
+            <td th:text="${obat.nama}"></td>
+            <td th:text="${obat.getHargaString()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

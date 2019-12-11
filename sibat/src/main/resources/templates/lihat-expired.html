@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Daftar Obat Expired</title>
+
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+<body>
+<nav th:replace="fragments/fragment :: navbar"></nav>
+<div class="container" style="padding-top: 30px">
+    <br>
+    <h3 style="background-color: #343a40; color: white">Daftar Obat Expired</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Kode</th>
+            <th scope="col">Nama</th>
+            <th scope="col">Nomor Registrasi</th>
+            <th scope="col">Tanggal Terbit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="obat, iterationStatus : *{listExpired}">
+            <td th:text="${iterationStatus.count}"></td>
+            <td th:text="${obat.kode}"></td>
+            <td th:text="${obat.nama}"></td>
+            <td th:text="${obat.nomorRegistrasi}"></td>
+            <td th:text="${obat.tanggalTerbit}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/}" th:text="'Kembali ke Beranda'"></a>
+</div>
+</body>
+</html>
